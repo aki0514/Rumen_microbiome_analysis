@@ -22,7 +22,7 @@ coverm genome \
     -2 "${READ2}" \
     --genome-fasta-directory "${GENOMES}" \
     -x fa \
-    -m rpkm tpm \
+    -m rpkm \
     -p bwa-mem \
     --threads 16 \
     --min-covered-fraction 10 \
