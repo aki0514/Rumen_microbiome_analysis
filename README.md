@@ -9,6 +9,10 @@ This repository contains the shell scripts and R scripts used for the genome-res
 ```
 .
 ├── shell/
+│   ├── trim.sh
+│   ├── trim.sh
+│   ├── trim.sh
+│   ├── trim.sh
 │   ├── prodigal.sh
 │   ├── cd_hit.sh
 │   ├── dRep95.sh
