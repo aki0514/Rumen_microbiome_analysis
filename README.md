@@ -1,8 +1,8 @@
-# Relationships between rumen microbiome and carcass traits in F1 cattle
+# Genome-Resolved Metagenomics Reveals the Taxonomic and Functional Landscape of the Rumen Microbiome in Japanese Black × Holstein Cattle and its Associations with Carcass Traits
 
 This repository contains the shell scripts and R scripts used for the genome-resolved metagenomic analyses described in our manuscript:
 
-> **Relationships between rumen microbiome and carcass traits in F1 cattle**
+> **Genome-Resolved Metagenomics Reveals the Taxonomic and Functional Landscape of the Rumen Microbiome in Japanese Black × Holstein Cattle and its Associations with Carcass Traits**
 
 ## Repository structure
 
@@ -61,5 +61,5 @@ R scripts used for downstream statistical analyses and figure generation, includ
 
 If you use these scripts, please cite:
 
-Sato et al. *Relationships between rumen microbiome and carcass traits in F1 cattle*.
+Sato et al. *Genome-Resolved Metagenomics Reveals the Taxonomic and Functional Landscape of the Rumen Microbiome in Japanese Black × Holstein Cattle and its Associations with Carcass Traits*.
 (In preparation)
