@@ -10,9 +10,15 @@ This repository contains the shell scripts and R scripts used for the genome-res
 .
 ├── shell/
 │   ├── trim.sh
-│   ├── trim.sh
-│   ├── trim.sh
-│   ├── trim.sh
+│   ├── Assemble.sh
+│   ├── BWA_back.sh
+│   ├── BWA_reference.sh
+│   ├── CheckM2.sh
+│   ├── CONCOCT.sh
+│   ├── DAS_Tool.sh
+│   ├── gtdb-tk226.sh
+│   ├── MaxBin2.sh
+│   ├── metabat2.sh
 │   ├── prodigal.sh
 │   ├── cd_hit.sh
 │   ├── dRep95.sh
@@ -24,14 +30,14 @@ This repository contains the shell scripts and R scripts used for the genome-res
 │
 ├── R/
 │   ├── MAG_diversity.R
-│   ├── JBvsF1.R
-│   ├── Taxa.R
-│   ├── Cor.R
+│   ├── MAG_abundance.R
+│   ├── MAG_Taxa.R
+│   ├── MAG_Cor.R
 │   ├── KO.R
 │   ├── Cazy.R
 │   ├── Protein_share.R
-│   ├── GH_JBvsF1.R
-│   └── cazy_carcass.R
+│   ├── MAG_cazy.R
+│   └── MAG_cazy_carcass.R
 ```
 
 ## Description
