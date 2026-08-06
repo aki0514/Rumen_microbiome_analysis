@@ -1,20 +1,3 @@
-#------------------------------------------------------------
-# MAG_diversity.R
-#
-# Purpose:
-#   Alpha- and beta-diversity analyses of MAG abundance.
-#
-# Input:
-#   - RPKM_matrix.tsv
-#   - sample-metadata.txt
-#
-# Output:
-#   - NMDS_MAG_Hellinger_Euclidean_Breed.tiff
-#   - NMDS_MAG_BrayCurtis_Breed.tiff
-#   - Observed_Breed.tiff
-#   - Shannon_Breed.tiff
-#------------------------------------------------------------
-
 library(vegan)
 library(tidyverse)
 library(ape)
@@ -39,6 +22,12 @@ adonis_result <- adonis2(
 )
 
 print(adonis_result)
+
+disp_euc <- betadisper(dist_euc, meta$Breed)
+
+anova(disp_euc)
+
+permutest(disp_euc, permutations = 999)
 
 nmds <- metaMDS(
   dist_euc,
@@ -103,6 +92,12 @@ adonis_bc <- adonis2(
 )
 
 print(adonis_bc)
+
+disp_bc <- betadisper(dist_bc, meta$Breed)
+
+anova(disp_bc)
+
+permutest(disp_bc, permutations = 999)
 
 nmds_bc <- metaMDS(
   dist_bc,
