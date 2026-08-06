@@ -54,155 +54,10 @@ Gene.cazy.sub <- subset_taxa(
   grepl("^(CBM|CE|PL|GH)", cazy)
 )
 
-# ======================================================
-# 5. Hellinger transformation (for NMDS & PERMANOVA)
-# ======================================================
 comm <- t(as(otu_table(Gene.cazy.sub), "matrix"))
 
-comm_hel <- decostand(
-  comm,
-  method = "hellinger"
-)
-
-# ------------------------------------------
-# 6. NMDS (Hellinger + Euclidean)
-# ------------------------------------------
-ord.nmds <- metaMDS(
-  comm_hel,
-  distance = "euclidean",
-  k = 2,
-  trymax = 200,
-  autotransform = FALSE
-)
-
-df_nmds <- as.data.frame(ord.nmds$points)
-df_nmds$SampleID <- rownames(df_nmds)
-df_nmds$Breed <- meta[df_nmds$SampleID, "Breed"]
-
-adonis_res <- adonis2(
-  comm_hel ~ Breed,
-  data = meta,
-  method = "euclidean",
-  permutations = 999
-)
-
-r2 <- adonis_res$R2[1]
-p  <- adonis_res$`Pr(>F)`[1]
-
-lab <- paste0(
-  "R² = ", sprintf("%.3f", r2),
-  ", P ", ifelse(p < 0.01, "< 0.01", sprintf("%.3f", p))
-)
-
-tiff("NMDS_Cazy_Hellinger.tiff",
-     height = 1300, width = 1500,
-     res = 300, compression = "lzw")
-
-ggplot(df_nmds, aes(x = MDS1, y = MDS2, color = Breed)) +
-  geom_point(size = 3) +
-  stat_ellipse(type = "t", linetype = 2, linewidth = 0.5) +
-  annotate(
-    "text",
-    x = Inf, y = 0.23,
-    label = lab,
-    hjust = 1.1, vjust = 0.5,
-    size = 3.5
-  ) +
-  scale_color_manual(values = c(JB="#1f78b4", F1="#e31a1c")) +
-  theme_bw() +
-  labs(x = "NMDS1", y = "NMDS2") +
-  theme(
-    axis.text = element_text(size = 10, colour = "black"),
-    panel.grid = element_blank()
-  )
-
-dev.off()
-
-# ------------------------------------------
-# 7. PERMANOVA (same transformed matrix)
-# ------------------------------------------
-adonis_res
-
-# ============================
-# ============================
-
-dist_bc <- vegdist(comm, method = "bray")
-meta <- read_tsv("sample-metadata.txt")
-
-# ============================
-# 11) PERMANOVA（BC）
-# ============================
-
-adonis_bc <- adonis2(
-  dist_bc ~ Breed,
-  data = meta,
-  permutations = 999
-)
-
-print(adonis_bc)
-
-# ============================
-# 12) NMDS（BC）
-# ============================
-
-nmds_bc <- metaMDS(
-  dist_bc,
-  k = 2,
-  trymax = 100
-)
-
-# ============================
-# ============================
-
-nmds_bc_points <- as.data.frame(nmds_bc$points) %>%
-  rownames_to_column("ID") %>%
-  left_join(meta, by = "ID")
-
-r2_bc <- adonis_bc$R2[1]
-p_bc  <- adonis_bc$`Pr(>F)`[1]
-
-lab_bc <- paste0(
-  "R² = ", sprintf("%.3f", r2_bc),
-  ", P ", ifelse(p_bc < 0.05, "< 0.05", sprintf("%.3f", p_bc))
-)
-
-# ============================
-# ============================
-
-tiff(
-  "NMDS_Cazy_BrayCurtis_Breed.tiff",
-  height = 1300,
-  width  = 1500,
-  res    = 300,
-  compression = "lzw"
-)
-
-ggplot(nmds_bc_points, aes(x = MDS1, y = MDS2, color = Breed)) +
-  geom_point(size = 3) +
-  stat_ellipse(type = "t", linetype = 2, linewidth = 0.5) +
-  annotate(
-    "text",
-    x = Inf, y = 0.33,
-    label = lab_bc,
-    hjust = 1.1, vjust = 0.5,
-    size = 3.5
-  ) +
-  scale_color_manual(values = c(JB = "#1f78b4", F1 = "#e31a1c")) +
-  theme_bw() +
-  labs(
-    x = "NMDS1",
-    y = "NMDS2",
-    title = ""
-  ) +
-  theme(
-    axis.text = element_text(size = 10, colour = "black"),
-    panel.grid = element_blank()
-  )
-
-dev.off()
-
 # ======================================================
-# 8. CAZy abundance table (for stats & plots)
+# 5. CAZy abundance table (for stats & plots)
 # ======================================================
 cazy_map <- cazy %>%
   dplyr::select(gene, cazy) %>%
@@ -234,7 +89,7 @@ rownames(comm_cazy) <- comm_cazy$SampleID
 comm_cazy$SampleID <- NULL
 
 # ------------------------------------------
-# 9. Core CAZy (≥50% samples)
+# 6. Core CAZy (≥50% samples)
 # ------------------------------------------
 presence_rate <- colMeans(comm_cazy > 0)
 core_cazy <- names(presence_rate[presence_rate >= 0.5])
@@ -242,7 +97,7 @@ core_cazy <- names(presence_rate[presence_rate >= 0.5])
 comm_cazy <- comm_cazy[, core_cazy, drop = FALSE]
 
 # ------------------------------------------
-# 10. Kruskal–Wallis test
+# 7. Kruskal–Wallis test
 # ------------------------------------------
 df_cazy <- as.data.frame(comm_cazy)
 df_cazy$Breed <- meta[rownames(df_cazy), "Breed"]
@@ -287,7 +142,7 @@ sig_names <- sig_cazy$CAZy
 write.csv(sig_cazy, "Significant_CAZy_statistics.csv", row.names = FALSE)
 
 # ------------------------------------------
-# 11. Heatmap (log10 + Z-score)
+# 8. Heatmap (log10 + Z-score)
 # ------------------------------------------
 mat_sig <- comm_cazy[, sig_names, drop = FALSE]
 mat_log <- log10(mat_sig + 1)
@@ -329,7 +184,7 @@ pheatmap(
 dev.off()
 
 # ------------------------------------------
-# 12. Bubble plot
+# 9. Bubble plot
 # ------------------------------------------
 eps <- 1e-6
 
